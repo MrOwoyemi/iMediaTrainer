@@ -1,133 +1,456 @@
+/* 1. IMPORT MUST BE LINE 1 */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 :root {
-    --bg-color: #212d35;
-    --header-color: #ffffff;
-    --topic-btn: #eb8b33;
-    --test-btn: #8e44ad;
-    --option-btn: #3483bb;
-    --correct: #28a745;
-    --wrong: #c54434;
-    --progress-fill: #1abc9c;
+    /* Light Theme Variables */
+    --bg-color: #F8F4FF;
+    --nav-bg: #2D033B;
+    --text-color: #333;
+    --secondary-text: #555;
+    --card-bg: #ffffff;
+    --border-color: #eee;
+    --search-bg: rgba(255, 255, 255, 0.15);
+
+    /* Constant Brand Colors */
+    --dark-purple: #2D033B;
+    --pastel-violet: #E0BBE4;
+    --sidebar-width: 260px;
+    --box-bg: #fff;
+    --box-border: #ddd;
 }
 
+/* Night Mode Overrides */
+body.dark-mode {
+    --bg-color: #121212;
+    --nav-bg: #1a1a1a;
+    --text-color: #e0e0e0;
+    --secondary-text: #ccc;
+    --card-bg: #1e1e1e;
+    --border-color: #333;
+    --search-bg: #333;
+    --pastel-violet: #4a3b4d;
+}
+
+/* 2. APPLY MONTSERRAT TO BODY */
 body {
-    background-color: var(--bg-color);
-    color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    justify-content: center;
     margin: 0;
-    padding: 20px;
+    font-family: 'Montserrat', Tahoma, Geneva, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow-x: hidden;
+    font-size: 18px;
+    line-height: 1.6;
+    transition: background 0.3s, color 0.3s;
 }
 
-#game-container {
+/* 3. FORCE BUTTONS & TEXTBOXES TO INHERIT THE FONT */
+button,
+input,
+textarea {
+    font-family: inherit;
+}
+
+/* 4. GOOGLE SANS FOR HEADINGS */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.logo,
+#topic-display {
+    font-family: 'Google Sans', 'Product Sans', 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- Navbar --- */
+.navbar {
+    background-color: #2D033B !important;
+    color: #ffffff;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: fixed;
     width: 100%;
-    max-width: 950px;
-    text-align: center;
+    top: 0;
+    z-index: 1001;
+    box-sizing: border-box;
 }
 
-/* Animations */
-.fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
+.logo-container {
+    display: flex;
+    align-items: center;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
+.logo {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
-.hidden { display: none !important; }
+.menu-btn {
+    width: 30px;
+    height: 20px;
+    margin-right: 25px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
-/* Progress & Headers */
+.bar {
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    transition: all 0.3s;
+    border-radius: 2px;
+}
+
+.change #bar1 {
+    transform: translateY(8.5px) rotate(45deg);
+}
+
+.change #bar2 {
+    opacity: 0;
+}
+
+.change #bar3 {
+    transform: translateY(-8.5px) rotate(-45deg);
+}
+
+.theme-toggle {
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 10px;
+    transition: transform 0.2s;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+/* --- Sidebar --- */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    background-color: var(--pastel-violet);
+    overflow-x: hidden;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-open {
+    width: var(--sidebar-width) !important;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar a {
+    padding: 15px 25px;
+    text-decoration: none;
+    color: #2D033B;
+    display: block;
+    font-weight: 600;
+}
+
+.sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* --- Main Content Area --- */
+#main-content {
+    margin-left: 0;
+    padding: 100px 40px;
+    transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.main-push {
+    margin-left: var(--sidebar-width) !important;
+}
+
+/* --- General Components --- */
+h2 {
+    color: var(--dark-purple);
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+/* --- Exam Trainer Specifics --- */
+#header-info {
+    display: flex;
+    justify-content: space-between;
+    background: var(--card-bg);
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
 #progress-wrapper {
     width: 100%;
-    background: #34495e;
-    height: 12px;
+    height: 10px;
+    background: var(--border-color);
+    border-radius: 5px;
     margin-bottom: 20px;
-    border-radius: 6px;
     overflow: hidden;
 }
 
 #progress-bar {
     height: 100%;
-    background: var(--progress-fill);
+    background: #2D033B;
     width: 0%;
-    transition: width 0.4s ease-in-out;
+    transition: width 0.3s ease;
 }
 
-#header-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    font-weight: bold;
-    font-size: 1.1rem;
-}
-
-/* Main Menu Grid */
-#topic-grid {
+/* --- Buttons & Grids (Purple Background Update) --- */
+#topic-grid,
+#past-papers-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 15px;
-    padding: 10px;
+    margin-bottom: 20px;
+}
+
+/* Make grid buttons use the brand purple */
+.topic-card,
+.past-paper-btn {
+    background: var(--dark-purple);
+    border: 1px solid var(--border-color);
+    color: #ffffff !important;
+    /* White text for the dark purple background */
+    padding: 25px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
+    font-weight: bold;
+}
+
+.topic-card:hover,
+.past-paper-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    border-color: var(--pastel-violet);
+}
+
+.past-paper-btn {
+    border-left: 5px solid #27ae60;
 }
 
 .topic-card {
-    background: var(--topic-btn);
-    min-height: 85px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    color: white;
+    border-top: 5px solid var(--dark-purple);
+}
+
+/* Solid Buttons */
+#long-q-btn,
+#full-test-btn {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 20px;
+    border-radius: 10px;
+    color: #ffffff !important;
     font-weight: bold;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+#long-q-btn {
+    background: #c0392b;
+    margin-bottom: 10px;
 }
 
 #full-test-btn {
-    background: var(--test-btn);
-    width: 90%;
-    font-size: 1.3rem;
-    padding: 20px;
+    background: var(--dark-purple);
     margin-bottom: 20px;
-    border-radius: 10px;
 }
 
-/* Quiz UI */
-#canvas-container {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    margin: 10px auto 30px;
-    display: inline-block;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+#full-test-btn {
+    background: var(--dark-purple);
+    margin-bottom: 20px;
+}
+
+/* --- Quiz Area Layout --- */
+#quiz-area {
+    max-width: 800px;
+    /* Stops the quiz from stretching too wide */
+    margin: 0 auto;
+    /* Centers the entire quiz area horizontally */
+}
+
+#quiz-area .card {
+    text-align: center;
+    /* Centers the question text */
+    padding: 30px;
+}
+
+#quiz-area h2 {
+    font-size: 1.4rem;
+    line-height: 1.5;
+}
+
+/* --- Quiz Area Options (The Buttons) --- */
+#options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 30px auto;
+    max-width: 650px;
+    /* Keeps the buttons neatly stacked in the middle */
 }
 
 .option-btn {
-    background: var(--option-btn);
-    width: 95%;
-    display: block;
-    margin: 12px auto;
-    font-size: 1.2rem;
-    padding: 18px;
-    border: none;
-    border-radius: 8px;
-    color: white;
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    color: var(--text-color) !important;
+    padding: 18px 25px;
+    font-size: 1.1rem;
+    border-radius: 12px;
     cursor: pointer;
+    text-align: center;
+    /* Centers the text inside the option buttons */
+    transition: all 0.2s ease-in-out;
+    font-weight: 500;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+    /* Soft modern shadow */
+}
+
+.option-btn:hover:not(:disabled) {
+    border-color: var(--dark-purple);
+    transform: translateY(-3px);
+    /* Button lifts up slightly when hovered */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    background: var(--card-bg);
+    /* Prevents the dark mode hover bug */
+}
+
+/* --- Answer Feedback Styles (Visibility Fix) --- */
+.option-btn.correct-answer {
+    background-color: #27ae60 !important;
+    /* Vibrant solid green */
+    border-color: #2ecc71 !important;
+    /* Brighter green border */
+    color: #ffffff !important;
+    /* Forced pure white text */
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.4) !important;
+    /* Soft green glow */
+    opacity: 1 !important;
+    /* Guarantees the button does not dim */
+}
+
+.option-btn.wrong-answer {
+    background-color: #c0392b !important;
+    /* Vibrant solid red */
+    border-color: #e74c3c !important;
+    /* Brighter red border */
+    color: #ffffff !important;
+    /* Forced pure white text */
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.4) !important;
+    /* Soft red glow */
+    opacity: 1 !important;
+    /* Guarantees the button does not dim */
+}
+
+/* --- Nav Controls (Leave / Hint / Continue) --- */
+#nav-controls {
+    display: flex;
+    gap: 15px;
+    margin: 30px auto 0;
+    max-width: 650px;
+    /* Matches the width of the options above it */
+}
+
+#nav-controls button {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #ffffff !important;
+    font-size: 1.05rem;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+#nav-controls button:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+.leave-btn {
+    background: #7f8c8d;
+}
+
+#hint-btn {
+    background: #f39c12;
+}
+
+#continue-btn {
+    background: var(--dark-purple);
 }
 
 #feedback-area {
-    margin: 25px auto;
-    padding: 20px;
-    border-radius: 10px;
-    font-size: 1.25rem;
-    min-height: 60px;
-    line-height: 1.6;
-    width: 90%;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    font-size: 1.1rem;
 }
 
-.leave-btn { background: var(--wrong); }
-#continue-btn { 
-    background: #f39c12; 
-    color: black; 
-    font-size: 1.4rem; 
-    padding: 15px 70px; 
-    margin-top: 20px;
+.fade-in {
+    animation: fadeIn 0.4s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    #main-content {
+        padding: 80px 20px;
+    }
+
+    .sidebar-open {
+        width: 100% !important;
+    }
+
+    #nav-controls {
+        flex-direction: column;
+    }
 }
